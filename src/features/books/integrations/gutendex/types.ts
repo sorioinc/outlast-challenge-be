@@ -1,7 +1,7 @@
 export interface GutendexPayload {
   count: number;
   next: string | null;
-  previous: string;
+  previous: string | null;
   results: GutendexBook[];
 }
 
@@ -14,7 +14,7 @@ export interface GutendexBook {
   bookshelves: string[];
   languages: Language[];
   copyright: boolean;
-  media_type: MediaType;
+  media_type: 'Text';
   formats: Formats;
   download_count: number;
 }
@@ -41,11 +41,4 @@ export interface Formats {
   'text/html; charset=us-ascii'?: string;
 }
 
-export enum Language {
-  En = 'en',
-  Es = 'es',
-}
-
-export enum MediaType {
-  Text = 'Text',
-}
+type Language = 'en' | 'es';
