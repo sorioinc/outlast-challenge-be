@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import errorHandler from 'errorhandler';
 import app from './app';
 

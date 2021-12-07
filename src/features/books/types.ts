@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { Type } from 'class-transformer';
-import { IsDefined, IsInt, IsPositive } from 'class-validator';
+import { IsDefined, IsInt, IsOptional, IsPositive } from 'class-validator';
 
 export interface GetBookRequest {
   page?: number;
@@ -39,19 +39,28 @@ export interface BooksProvider {
 export interface IBooksService {
   getBooks(): Promise<GetBookResponse>;
   getBooksFromPage(page: number): Promise<GetBookResponse>;
-  getIsFavorite(bookId: number): Promise<IsFavoriteResponse>;
-  setIsFavorite(bookId: number): Promise<IsFavoriteResponse>;
+  getIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse>;
+  setIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse>;
 }
 
 export class GetBooksByPageRequest {
+  @IsOptional()
   @IsDefined()
   @IsPositive()
   @IsInt()
   @Type(() => Number)
-  public pageNumber = 0;
+  public pageNumber?: number;
 }
 
-export class PutBooksRequest {
+export class GetIsFavoriteBookRequest {
+  @IsDefined()
+  @IsPositive()
+  @IsInt()
+  @Type(() => Number)
+  public bookId = 0;
+}
+
+export class PutIsFavoriteBookRequest {
   @IsDefined()
   @IsPositive()
   @IsInt()

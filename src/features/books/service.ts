@@ -17,7 +17,9 @@ export default class BooksService implements IBooksService {
     return books;
   }
 
-  async getIsFavorite(bookId: number): Promise<IsFavoriteResponse> {
+  async getIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse> {
+    this.persistanceService.changeDatabase(userId);
+    // TODO: Validate bookId
     const book = await this.persistanceService.findById(bookId);
     return {
       bookId,
@@ -25,7 +27,9 @@ export default class BooksService implements IBooksService {
     };
   }
 
-  async setIsFavorite(bookId: number): Promise<IsFavoriteResponse> {
+  async setIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse> {
+    this.persistanceService.changeDatabase(userId);
+    // TODO: Validate bookId
     let book = await this.persistanceService.findById(bookId);
     if (!book) {
       book = await this.persistanceService.insert({ id: bookId });
