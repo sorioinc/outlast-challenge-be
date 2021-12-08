@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import lusca from 'lusca';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import cors from 'cors';
 
 import routes from './routes';
 import { logger } from './util';
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
+
+app.use(cors());
 
 /**
  * Primary app routes.
