@@ -106,11 +106,11 @@ describe('Gutendex', () => {
     mock.onGet().reply(200, data);
 
     const provider = new Gutendex();
-    const result = await provider.loadBooks();
+    const result = await provider.loadBooks(5);
 
     expect(result.nextPage).toBe(expectedNextPage);
     expect(result.books).toEqual(expectedBooks);
-    expect(mock.history.get[0].url).toBe('https://gutendex.com/books/');
+    expect(mock.history.get[0].url).toBe('https://gutendex.com/books/?page=5');
   });
 
   test('Should send back null when next page is null', async () => {

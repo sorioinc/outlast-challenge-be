@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { StatusCodes } from 'http-status-codes';
-import { PersistenceLayer } from '../types';
+import { Repository } from '../types';
 
 const baseUrl = 'https://jsonbase.com';
 export interface JsonBaseRecord {
   id: number;
 }
-export default class JsonBase<T extends JsonBaseRecord> implements PersistenceLayer<T> {
+export default class JsonBase<T extends JsonBaseRecord> implements Repository<T> {
   constructor(private bucket: string, private bag: string) {}
 
   findAll(): Promise<T[]> {
@@ -26,13 +26,13 @@ export default class JsonBase<T extends JsonBaseRecord> implements PersistenceLa
     return records.find(r => r.id === id);
   }
 
-  async insert(item: T): Promise<T> {
+  async insert(item: T): Promise<T[]> {
     const records = await this.findAll();
     const updated = [...records, item];
     return axios.put(`${baseUrl}/${this.bucket}/${this.bag}`, updated).then(({ data }) => data);
   }
 
-  async update(item: T): Promise<T> {
+  async update(item: T): Promise<T[]> {
     const records = await this.findAll();
     const updated = records.filter(r => r.id !== item.id).concat(item);
     return axios.put(`${baseUrl}/${this.bucket}/${this.bag}`, updated).then(({ data }) => data);

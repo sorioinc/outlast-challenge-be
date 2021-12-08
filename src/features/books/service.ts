@@ -1,26 +1,26 @@
-import { FavoriteBookModel, PersistenceLayer } from '../../repositories';
+import { FavoriteBookModel, Repository } from '../../repositories';
 import { IsFavoriteResponse, GetBookResponse, BooksProvider, IBooksService } from './types';
 
 export default class BooksService implements IBooksService {
   constructor(
-    private booksService: BooksProvider,
-    private persistanceService: PersistenceLayer<FavoriteBookModel>,
+    private booksProvider: BooksProvider,
+    private favoriteBookRepository: Repository<FavoriteBookModel>,
   ) {}
 
   async getBooks(): Promise<GetBookResponse> {
-    const books = await this.booksService.loadBooks();
+    const books = await this.booksProvider.loadBooks();
     return books;
   }
 
   async getBooksFromPage(page: number): Promise<GetBookResponse> {
-    const books = await this.booksService.loadBooks(page);
+    const books = await this.booksProvider.loadBooks(page);
     return books;
   }
 
   async getIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse> {
-    this.persistanceService.changeDatabase(userId);
+    this.favoriteBookRepository.changeDatabase(userId);
     // TODO: Validate bookId
-    const book = await this.persistanceService.findById(bookId);
+    const book = await this.favoriteBookRepository.findById(bookId);
     return {
       bookId,
       isFavorite: !!book,
@@ -28,17 +28,18 @@ export default class BooksService implements IBooksService {
   }
 
   async setIsFavorite(userId: string, bookId: number): Promise<IsFavoriteResponse> {
-    this.persistanceService.changeDatabase(userId);
+    this.favoriteBookRepository.changeDatabase(userId);
     // TODO: Validate bookId
-    let book = await this.persistanceService.findById(bookId);
+    const book = await this.favoriteBookRepository.findById(bookId);
+    let result: FavoriteBookModel[];
     if (!book) {
-      book = await this.persistanceService.insert({ id: bookId });
+      result = await this.favoriteBookRepository.insert({ id: bookId });
     } else {
-      book = await this.persistanceService.update({ id: bookId });
+      result = await this.favoriteBookRepository.update({ id: bookId });
     }
     return {
-      bookId: book.id,
-      isFavorite: !!book,
+      bookId,
+      isFavorite: result.findIndex(r => r.id === bookId) > -1,
     };
   }
 }

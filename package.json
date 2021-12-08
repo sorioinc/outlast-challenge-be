@@ -42,6 +42,7 @@
     "winston": "3.3.3"
   },
   "devDependencies": {
+    "@fluffy-spoon/substitute": "^1.208.0",
     "@types/body-parser": "1.19.2",
     "@types/compression": "1.7.2",
     "@types/concurrently": "6.4.0",
