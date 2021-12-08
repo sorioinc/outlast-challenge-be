@@ -1,9 +1,9 @@
 import Substitute, { SubstituteOf, Arg } from '@fluffy-spoon/substitute';
 import BooksService from './service';
-import type { BooksProvider } from './types';
+import type { BookPayload, BooksProvider } from './types';
 import type { Repository, FavoriteBookModel } from '../../repositories';
 
-const bookProviderData = {
+const bookProviderData: BookPayload = {
   books: [
     {
       authors: 'Shelley, Mary Wollstonecraft',
@@ -38,8 +38,8 @@ describe('BooksService', () => {
 
   describe('getBooks', () => {
     test('Should get all books given a pageNumber successfully', async () => {
-      const expectedResponseWhenPageIs3 = { ...bookProviderData, nextPage: 4 };
-      const expectedResponseWhenPageIs7 = { ...bookProviderData, nextPage: 8 };
+      const expectedResponseWhenPageIs3: BookPayload = { ...bookProviderData, nextPage: 4 };
+      const expectedResponseWhenPageIs7: BookPayload = { ...bookProviderData, nextPage: 8 };
       mockedBooksProvider
         .loadBooks(Arg.is(x => x === 3))
         .resolves({ ...bookProviderData, nextPage: 4 });

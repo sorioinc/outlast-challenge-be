@@ -20,7 +20,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["jest.config.ts"],
+  "ignorePatterns": ["jest.config.ts", "jest.setup.ts"],
   "plugins": ["prettier", "@typescript-eslint", "import"],
   "rules": {
     "prettier/prettier": [
